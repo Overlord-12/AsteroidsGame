@@ -1,3 +1,4 @@
+using SceneLib;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -25,7 +26,7 @@ namespace AsteroidsGame
             };
             form.Show();
 
-            SceneManager    // Обратимся к менеджеру сцен
+            SceneController    // Обратимся к менеджеру сцен
                 .Get()
                 .Init<MenuScene>(form) // Попросим загрузить меню игры
                 .Draw();

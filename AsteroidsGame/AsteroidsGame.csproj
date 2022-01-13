@@ -6,4 +6,8 @@
     <UseWindowsForms>true</UseWindowsForms>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\SceneLib\SceneLib.csproj" />
+  </ItemGroup>
+
 </Project>
