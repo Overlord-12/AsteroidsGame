@@ -1,4 +1,5 @@
 ﻿using GameEngine.Interface;
+using GameEngine.Properties;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -9,7 +10,7 @@ using System.Windows.Forms;
 
 namespace GameEngine.Objects
 {
-    abstract class BaseObject : ICollision
+    public abstract class BaseObject : ICollision
     {
 
         protected Point Pos;
@@ -41,7 +42,7 @@ namespace GameEngine.Objects
 
         public virtual void Draw()
         {
-            GameProcess.Buffer.Graphics.DrawImage(Properties.Resources.asteroid, Pos.X, Pos.Y, Size.Width, Size.Height);
+            GameProcess.Buffer.Graphics.DrawImage(Resources.asteroid, Pos.X, Pos.Y, Size.Width, Size.Height);
 
         }
 

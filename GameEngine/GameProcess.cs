@@ -1,4 +1,5 @@
-﻿using System;
+﻿using GameEngine.Objects;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
@@ -13,9 +14,7 @@ namespace GameEngine
         private static BufferedGraphicsContext _context;
         private static BufferedGraphics _buffer;
         private static List<Asteroid> asteroids = new List<Asteroid>();
-        private static BaseObject[] _stars;
-        private static BaseObject[] _planets;
-        private static List<Laser> laser = new List<Laser>();
+        private static List<Bullet> laser = new List<Bullet>();
         private static List<Medicine> medicines = new List<Medicine>();
         private static Random random = new Random();
 
