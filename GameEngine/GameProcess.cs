@@ -33,7 +33,7 @@ namespace GameEngine
             get { return _buffer; }
         }
 
-        static Game() { }
+        static GameProcess() { }
 
 
 
@@ -49,7 +49,7 @@ namespace GameEngine
 
             _buffer = _context.Allocate(g, new Rectangle(0, 0, Width, Height));
 
-            Load();
+            //Load();
 
 
             timer.Interval = 100;
@@ -76,7 +76,7 @@ namespace GameEngine
             {
                 if (laser.Count < 3)
                 {
-                    laser.Add(new Laser(new Point(ship.Rect.X + 10, ship.Rect.Y + 10), new Point(5, 0), new Size(40, 30)));
+                    laser.Add(new Bullet(new Point(ship.Rect.X + 10, ship.Rect.Y + 10), new Point(5, 0), new Size(40, 30)));
                 }
             }
             if (e.KeyCode == Keys.W)
@@ -106,7 +106,6 @@ namespace GameEngine
         public static void Draw()
         {
             _buffer.Graphics.Clear(Color.Black);
-            _buffer.Graphics.DrawImage(Properties.Resources.Sun1, 50, 50, 350, 300);
             ship.Draw();
 
 
@@ -123,21 +122,9 @@ namespace GameEngine
                 med.Draw();
             }
 
-
             foreach (var asteroid in asteroids)
                 asteroid.Draw();
 
-
-
-            foreach (var star in _stars)
-                if (star != null)
-                {
-                    star.Draw(); // Переопределенный метод Draw
-                }
-
-
-            foreach (var planet in _planets)
-                planet.Draw();
             foreach (var _laser in laser)
                 _laser.Draw();
 
@@ -218,11 +205,6 @@ namespace GameEngine
 
             //}
 
-            foreach (var star in _stars)
-                star.Update(); // Переопределенный метод Update
-            foreach (var planets in _planets)
-                planets.Update();
-
             foreach (var _laser in laser)
             {
 
@@ -242,32 +224,32 @@ namespace GameEngine
 
         }
 
-        public static void Load()
-        {
+        //public static void Load()
+        //{
 
-            //if (asteroids.Count < 15)
-            //{
+        //    //if (asteroids.Count < 15)
+        //    //{
 
-            //    var size = random.Next(10,50);
-            //    asteroids.Add(new Asteroid(new Point(300, (i + 1) * 20), new Point(-i, -i), new Size(size, size)));
-            //    i++;
-            //    Game.Load();
-            //}
-
-
-            _stars = new BaseObject[10];
-            for (int i = 0; i < _stars.Length; i++)
-            {
-                _stars[i] = new Star(new Point(400, (i + 1) * 30), new Point(i + 1, i + 1), new Size(3, 3));
-            }
-            _planets = new BaseObject[2];
-            for (int i = 0; i < _planets.Length; i++)
-            {
-                var size = random.Next(50, 100);
-                _planets[i] = new Planet(new Point(300, (i + 1) * 100), new Point(-i, -i), new Size(size, size));
-            }
+        //    //    var size = random.Next(10,50);
+        //    //    asteroids.Add(new Asteroid(new Point(300, (i + 1) * 20), new Point(-i, -i), new Size(size, size)));
+        //    //    i++;
+        //    //    Game.Load();
+        //    //}
 
 
-        }
+        //    _stars = new BaseObject[10];
+        //    for (int i = 0; i < _stars.Length; i++)
+        //    {
+        //        _stars[i] = new Star(new Point(400, (i + 1) * 30), new Point(i + 1, i + 1), new Size(3, 3));
+        //    }
+        //    _planets = new BaseObject[2];
+        //    for (int i = 0; i < _planets.Length; i++)
+        //    {
+        //        var size = random.Next(50, 100);
+        //        _planets[i] = new Planet(new Point(300, (i + 1) * 100), new Point(-i, -i), new Size(size, size));
+        //    }
+
+
+        //}
     }
 }
