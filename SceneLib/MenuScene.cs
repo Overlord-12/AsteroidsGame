@@ -1,4 +1,4 @@
-﻿using GameEgine;
+﻿
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -26,15 +26,15 @@ namespace SceneLib
         {
             if (e.KeyCode == Keys.Escape)
             {
-                _form.Close(); // Закрываем форму, завершаем работу приложения
+                _form.Close(); 
             }
             if (e.KeyCode == Keys.Enter)
             {
-                SceneController                // Обратимся к менеджеру сцен
+                SceneController              
                     .Get();
-                Game.Init(_form);
-                Game.Draw();
-                // Проинициализируем сцену с игрой
+                GameEngine.GameProcess.Init(_form);
+                GameEngine.GameProcess.Draw();
+                
 
             }
         }
