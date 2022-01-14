@@ -13,17 +13,20 @@ namespace GameEngine.Objects
     public abstract class BaseObject : ICollision
     {
 
-        protected Point Pos;
-        protected Point Dir;
-        protected Size Size;
+        protected Point pos;
+        protected Point dir;
+        protected Size size;
+        public Size GetSize => this.size;
+        public Point GetPos => this.pos;
+        public Point GetDir => this.dir;
 
         public BaseObject(Point pos, Point dir, Size size)
         {
             try
             {
-                Pos = pos;
-                Dir = dir;
-                Size = size;
+                this.pos = pos;
+                this.dir = dir;
+                this.size = size;
                 if (size.Width < 0 || size.Height < 0) throw new Exception();
 
             }
@@ -33,7 +36,7 @@ namespace GameEngine.Objects
             }
         }
 
-        public Rectangle Rect => new Rectangle(Pos, Size);
+        public Rectangle Rect => new Rectangle(pos, size);
 
         public bool Collision(ICollision obj)
         {
@@ -42,27 +45,25 @@ namespace GameEngine.Objects
 
         public virtual void Draw()
         {
-            GameProcess.Buffer.Graphics.DrawImage(Resources.asteroid, Pos.X, Pos.Y, Size.Width, Size.Height);
+            GameProcess.Buffer.Graphics.DrawImage(Resources.asteroid, pos.X, pos.Y, size.Width, size.Height);
 
         }
 
         public virtual void Update()
         {
-            Pos.X = Pos.X + Dir.X;
-            Pos.Y = Pos.Y + Dir.Y;
+            pos.X = pos.X + dir.X;
+            pos.Y = pos.Y + dir.Y;
 
-            if (Pos.X < 0) Dir.X = -Dir.X;
-            if (Pos.X > GameProcess.Width) Dir.X = -Dir.X;
-            if (Pos.Y < 0) Dir.Y = -Dir.Y;
-            if (Pos.Y > GameProcess.Height) Dir.Y = -Dir.Y;
+            if (pos.X < 0) dir.X = -dir.X;
+            if (pos.X > GameProcess.Width) dir.X = -dir.X;
+            if (pos.Y < 0) dir.Y = -dir.Y;
+            if (pos.Y > GameProcess.Height) dir.Y = -dir.Y;
         }
-
 
         public virtual void UpdateColl()
         {
-            Pos.X = 0;
-            Pos.Y = 200;
+            pos.X = 0;
+            pos.Y = 200;
         }
-
     }
 }

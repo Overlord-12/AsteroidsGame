@@ -7,10 +7,9 @@ using System.Threading.Tasks;
 
 namespace GameEngine.Objects
 {
-    public class Bullet:BaseObject
+    public class Laser : BaseObject
     {
-        public Bullet(Point pos, Point dir, Size size) : base(pos, dir, size) { }
-
+        public Laser(Point pos, Point dir, Size size) : base(pos, dir, size) { } 
         public override void Draw()
         {
             GameProcess.Buffer.Graphics.DrawImage(Properties.Resources.laser, pos.X, pos.Y, size.Width, size.Height);

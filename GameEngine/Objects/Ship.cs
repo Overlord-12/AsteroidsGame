@@ -19,7 +19,7 @@ namespace GameEngine.Objects
 
         public override void Draw()
         {
-            GameProcess.Buffer.Graphics.DrawImage(Properties.Resources.ship, Pos.X, Pos.Y, Size.Width, Size.Height);
+            GameProcess.Buffer.Graphics.DrawImage(Properties.Resources.ship, pos.X, pos.Y, size.Width, size.Height);
         }
 
         public override void Update()
@@ -37,20 +37,20 @@ namespace GameEngine.Objects
 
         public void Up()
         {
-            if (Pos.Y > 0) Pos.Y = Pos.Y - Dir.Y;
+            if (pos.Y > 0) pos.Y = pos.Y - dir.Y;
         }
         public void Down()
         {
-            if (Pos.Y < GameProcess.Height) Pos.Y = Pos.Y + Dir.Y;
+            if (pos.Y < GameProcess.Height) pos.Y = pos.Y + dir.Y;
 
         }
         public void Left()
         {
-            if (Pos.X > 0) Pos.X = Pos.X - Dir.X;
+            if (pos.X > 0) pos.X = pos.X - dir.X;
         }
         public void Right()
         {
-            if (Pos.X < (GameProcess.Width / 2)) Pos.X = Pos.X + Dir.X;
+            if (pos.X < (GameProcess.Width / 2)) pos.X = pos.X + dir.X;
         }
         public void Die()
         {

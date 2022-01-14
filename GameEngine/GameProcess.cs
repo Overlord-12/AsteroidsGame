@@ -14,13 +14,13 @@ namespace GameEngine
         private static BufferedGraphicsContext _context;
         private static BufferedGraphics _buffer;
         private static List<Asteroid> asteroids = new List<Asteroid>();
-        private static List<Bullet> laser = new List<Bullet>();
+        private static List<Bullet> bullets = new List<Bullet>();
         private static List<Medicine> medicines = new List<Medicine>();
+        private static List<Laser> lasers = new List<Laser>();
         private static Random random = new Random();
 
         static Ship ship = new Ship(new Point(10, 400), new Point(5, 5), new Size(70, 70));
         static Timer timer = new Timer();
-        private static int damage;
         private static int score;
 
 
@@ -35,9 +35,6 @@ namespace GameEngine
 
         static GameProcess() { }
 
-
-
-
         public static void Init(Form form)
         {
             Graphics g;
@@ -48,9 +45,6 @@ namespace GameEngine
             Height = form.ClientSize.Height;
 
             _buffer = _context.Allocate(g, new Rectangle(0, 0, Width, Height));
-
-            //Load();
-
 
             timer.Interval = 100;
             timer.Start();
@@ -74,10 +68,11 @@ namespace GameEngine
         {
             if (e.KeyCode == Keys.Space)
             {
-                if (laser.Count < 3)
-                {
-                    laser.Add(new Bullet(new Point(ship.Rect.X + 10, ship.Rect.Y + 10), new Point(5, 0), new Size(40, 30)));
-                }
+                bullets.Add(new Bullet(new Point(ship.Rect.X + 10, ship.Rect.Y + 10), new Point(5, 0), new Size(40, 30)));
+            }
+            if(e.KeyCode == Keys.Alt)
+            {
+                lasers.Add(new Laser(new Point(ship.Rect.X + 10, ship.Rect.Y + 10), new Point(5, 0), new Size(40, 30)));
             }
             if (e.KeyCode == Keys.W)
             {
@@ -125,7 +120,7 @@ namespace GameEngine
             foreach (var asteroid in asteroids)
                 asteroid.Draw();
 
-            foreach (var _laser in laser)
+            foreach (var _laser in bullets)
                 _laser.Draw();
 
 
@@ -134,6 +129,7 @@ namespace GameEngine
             {
                 ship.Draw();
                 Buffer.Graphics.DrawString($"HP{ship.Energy}", SystemFonts.DefaultFont, Brushes.White, 100, 10);
+                Buffer.Graphics.DrawString($"У вас осталось {lasers.Count} выстрелов лазера", SystemFonts.DefaultFont, Brushes.White, 100, 30);
                 Buffer.Graphics.DrawString($"Score{score}", SystemFonts.DefaultFont, Brushes.White, 100, 20);
                 Buffer.Render();
             }
@@ -145,7 +141,7 @@ namespace GameEngine
         {
             if (asteroids.Count < 15)
             {
-                var size = random.Next(10, 50);
+                var size = 50;
                 var location = random.Next(0, Height);
                 asteroids.Add(new Asteroid(new Point(Width - 100, location), new Point(-4, -4), new Size(size, size)));
             }
@@ -163,14 +159,19 @@ namespace GameEngine
             {
                 var asteroid = asteroids[i];
 
-                for (int j = 0; j < laser.Count; j++)
+                for (int j = 0; j < bullets.Count; j++)
                 {
-                    if (asteroids[i].Collision(laser[j]))
+                    if (asteroids[i].Collision(bullets[j]))
                     {
                         asteroids.RemoveAt(i);
-                        laser.RemoveAt(j);
+                        bullets.RemoveAt(j);
+                        if(asteroid.GetSize.Width == 50)
+                        {
+                            CreateLitleAsteroids(asteroid);
+                        }
                         score += 30;
-                        i--;
+                        if(i != 0)
+                            i--;
                         continue;
                     }
                 }
@@ -182,14 +183,13 @@ namespace GameEngine
                     i--;
                     continue;
                 }
-
-
-
             }
+
             foreach (var _asteroid in asteroids)
             {
                 _asteroid.Update();
             }
+
             for (int j = 0; j < medicines.Count; j++)
             {
                 if (ship.Collision(medicines[j]))
@@ -198,58 +198,30 @@ namespace GameEngine
                     ship.HP_Plus(30);
                 }
             }
-            //if (medicines != null && ship.Collision(medicines))
-            //{
-            //    medicines.Remove;
-            //    ship.HP_Plus(30);
 
-            //}
-
-            foreach (var _laser in laser)
+            foreach (var _laser in bullets)
             {
-
                 _laser.Update();
-
             }
 
-            for (int i = laser.Count - 1; i >= 0; i--)
+            for (int i = bullets.Count - 1; i >= 0; i--)
             {
-                if (laser[i].GetPos.X > Width)
+                if (bullets[i].GetPos.X > Width)
                 {
-                    laser.RemoveAt(i);
+                    bullets.RemoveAt(i);
                 }
             }
-
-
-
         }
 
-        //public static void Load()
-        //{
+        public static void CreateLitleAsteroids(Asteroid parentAsteroid)
+        {
+            Random random = new Random();
+            for (int i = 0; i < 2; i++)
+            {
+                Point pos = new Point(parentAsteroid.GetPos.X + random.Next(1,20), parentAsteroid.GetPos.Y + random.Next(1, 20));
+                asteroids.Add(new Asteroid(pos, parentAsteroid.GetDir, new Size(25, 25)));
+            }
+        }
 
-        //    //if (asteroids.Count < 15)
-        //    //{
-
-        //    //    var size = random.Next(10,50);
-        //    //    asteroids.Add(new Asteroid(new Point(300, (i + 1) * 20), new Point(-i, -i), new Size(size, size)));
-        //    //    i++;
-        //    //    Game.Load();
-        //    //}
-
-
-        //    _stars = new BaseObject[10];
-        //    for (int i = 0; i < _stars.Length; i++)
-        //    {
-        //        _stars[i] = new Star(new Point(400, (i + 1) * 30), new Point(i + 1, i + 1), new Size(3, 3));
-        //    }
-        //    _planets = new BaseObject[2];
-        //    for (int i = 0; i < _planets.Length; i++)
-        //    {
-        //        var size = random.Next(50, 100);
-        //        _planets[i] = new Planet(new Point(300, (i + 1) * 100), new Point(-i, -i), new Size(size, size));
-        //    }
-
-
-        //}
     }
 }

@@ -13,7 +13,7 @@ namespace GameEngine.Objects
 
         public override void Draw()
         {
-            GameProcess.Buffer.Graphics.DrawImage(Properties.Resources.medicine, Pos.X, Pos.Y, Size.Width, Size.Height);
+            GameProcess.Buffer.Graphics.DrawImage(Properties.Resources.medicine, pos.X, pos.Y, size.Width, size.Height);
         }
 
 

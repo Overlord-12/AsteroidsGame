@@ -24,11 +24,11 @@ namespace SceneLib
         public IScene Init<T>(Form form) where T : BaseForm, new()
         {
             if (_scene != null)
-                _scene.Dispose(); // Очищаем старую сцену
+                _scene.Dispose();
 
-            _scene = new T(); // Создаем экземпляр новой сцены
+            _scene = new T();
             _scene.Init(form);
-            return _scene; // Возвращаем сцену
+            return _scene;
         }
     }
 }
