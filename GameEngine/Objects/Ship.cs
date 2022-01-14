@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace GameEngine.Objects
 {
-    class Ship : BaseObject
+    public class Ship : BaseObject
     {
         public static event EventHandler DieShip;
         protected int HP = 100;

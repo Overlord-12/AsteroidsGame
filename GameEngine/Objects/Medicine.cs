@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace GameEngine.Objects
 {
-    class Medicine : BaseObject
+    public class Medicine : BaseObject
     {
         public Medicine(Point pos, Point dir, Size size) : base(pos, dir, size) { }
 

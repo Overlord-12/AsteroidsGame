@@ -16,9 +16,7 @@ namespace GameEngine.Objects
         }
         public override void Update()
         {
-
             pos.X = pos.X + 15;
-
         }
     }
 }

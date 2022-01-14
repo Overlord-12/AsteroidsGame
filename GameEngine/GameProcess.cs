@@ -1,4 +1,5 @@
-﻿using GameEngine.Objects;
+﻿using GameEngine.GameLogic;
+using GameEngine.Objects;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -9,7 +10,7 @@ using System.Windows.Forms;
 
 namespace GameEngine
 {
-    public static class GameProcess
+    public class GameProcess
     {
         private static BufferedGraphicsContext _context;
         private static BufferedGraphics _buffer;
@@ -17,6 +18,7 @@ namespace GameEngine
         private static List<Bullet> bullets = new List<Bullet>();
         private static List<Medicine> medicines = new List<Medicine>();
         private static List<Laser> lasers = new List<Laser>();
+        private static List<UFO> ufo = new List<UFO>();
         private static Random random = new Random();
 
         static Ship ship = new Ship(new Point(10, 400), new Point(5, 5), new Size(70, 70));
@@ -38,6 +40,7 @@ namespace GameEngine
         public static void Init(Form form)
         {
             Graphics g;
+            CollisionLogic collision = new CollisionLogic();
             _context = BufferedGraphicsManager.Current;
             g = form.CreateGraphics();
 
@@ -117,6 +120,11 @@ namespace GameEngine
                 med.Draw();
             }
 
+            foreach(var _ufo in ufo)
+            {
+                _ufo.Draw();
+            }
+
             foreach (var asteroid in asteroids)
                 asteroid.Draw();
 
@@ -145,9 +153,19 @@ namespace GameEngine
                 var location = random.Next(0, Height);
                 asteroids.Add(new Asteroid(new Point(Width - 100, location), new Point(-4, -4), new Size(size, size)));
             }
+            if(ufo.Count < 1)
+            {
+                var size = 50;
+                var location = random.Next(0, Height);
+                ufo.Add(new UFO(new Point(Width - 100, location), new Point(-4, -4), new Size(size, size)));
+            }
             foreach (var med in medicines)
             {
                 med.Draw();
+            }
+            foreach(var _ufo in ufo)
+            {
+                _ufo.Update(ship.GetPos);
             }
 
             if (ship.Energy <= 0)
@@ -155,48 +173,14 @@ namespace GameEngine
                 ship.Die();
             }
 
-            for (int i = 0; i < asteroids.Count; i++)
-            {
-                var asteroid = asteroids[i];
-
-                for (int j = 0; j < bullets.Count; j++)
-                {
-                    if (asteroids[i].Collision(bullets[j]))
-                    {
-                        asteroids.RemoveAt(i);
-                        bullets.RemoveAt(j);
-                        if(asteroid.GetSize.Width == 50)
-                        {
-                            CreateLitleAsteroids(asteroid);
-                        }
-                        score += 30;
-                        if(i != 0)
-                            i--;
-                        continue;
-                    }
-                }
-
-                if (ship != null && asteroids[i].Collision(ship))
-                {
-                    asteroids.RemoveAt(i);
-                    ship.HP_Minus(10);
-                    i--;
-                    continue;
-                }
-            }
+            CollisionLogic.AsteroidsCollision( asteroids, bullets,  ship, ref score);
+            CollisionLogic.UFOCollision(ship, ufo);
+            CollisionLogic.MedicineCollision(medicines, ship);
+            CollisionLogic.BulletAndUFOCollision(ufo,bullets,ref score);
 
             foreach (var _asteroid in asteroids)
             {
                 _asteroid.Update();
-            }
-
-            for (int j = 0; j < medicines.Count; j++)
-            {
-                if (ship.Collision(medicines[j]))
-                {
-                    medicines.RemoveAt(j);
-                    ship.HP_Plus(30);
-                }
             }
 
             foreach (var _laser in bullets)
@@ -210,16 +194,6 @@ namespace GameEngine
                 {
                     bullets.RemoveAt(i);
                 }
-            }
-        }
-
-        public static void CreateLitleAsteroids(Asteroid parentAsteroid)
-        {
-            Random random = new Random();
-            for (int i = 0; i < 2; i++)
-            {
-                Point pos = new Point(parentAsteroid.GetPos.X + random.Next(1,20), parentAsteroid.GetPos.Y + random.Next(1, 20));
-                asteroids.Add(new Asteroid(pos, parentAsteroid.GetDir, new Size(25, 25)));
             }
         }
 

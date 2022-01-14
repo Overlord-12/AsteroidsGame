@@ -1,5 +1,4 @@
-﻿
-using GameEngine;
+﻿using GameEngine;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -10,10 +9,8 @@ using System.Windows.Forms;
 
 namespace SceneLib
 {
-    public class MenuScene : BaseForm
+    public class EndScene: BaseForm
     {
-        public object SceneManager { get; private set; }
-
         public override void Draw()
         {
             Buffer.Graphics.Clear(Color.Black);
@@ -27,7 +24,7 @@ namespace SceneLib
         {
             if (e.KeyCode == Keys.Escape)
             {
-                _form.Close(); 
+                _form.Close();
             }
             if (e.KeyCode == Keys.Enter)
             {

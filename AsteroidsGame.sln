@@ -3,11 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.31729.503
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AsteroidsGame", "AsteroidsGame\AsteroidsGame.csproj", "{0C8150D7-6A41-4FA7-BBF6-297E32C26ED8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AsteroidsGame", "AsteroidsGame\AsteroidsGame.csproj", "{0C8150D7-6A41-4FA7-BBF6-297E32C26ED8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SceneLib", "SceneLib\SceneLib.csproj", "{938D5E77-BC61-4569-940A-9BD379DE0735}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SceneLib", "SceneLib\SceneLib.csproj", "{938D5E77-BC61-4569-940A-9BD379DE0735}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GameEngine", "GameEngine\GameEngine.csproj", "{2E89A17D-010B-493C-A460-9DBEA40060B4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GameEngine", "GameEngine\GameEngine.csproj", "{2E89A17D-010B-493C-A460-9DBEA40060B4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
