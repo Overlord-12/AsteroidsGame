@@ -26,9 +26,9 @@ namespace AsteroidsGame
             };
             form.Show();
 
-            SceneController    // Обратимся к менеджеру сцен
+            SceneController   
                 .Get()
-                .Init<MenuScene>(form) // Попросим загрузить меню игры
+                .Init<MenuScene>(form) 
                 .Draw();
 
             Application.Run(form);

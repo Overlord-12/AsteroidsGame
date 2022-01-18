@@ -1,5 +1,6 @@
 ﻿using GameEngine.GameLogic;
 using GameEngine.Objects;
+using SceneLib;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -12,70 +13,76 @@ namespace GameEngine
 {
     public class GameProcess
     {
-        private static BufferedGraphicsContext _context;
-        private static BufferedGraphics _buffer;
-        private static List<Asteroid> asteroids = new List<Asteroid>();
-        private static List<Bullet> bullets = new List<Bullet>();
-        private static List<Medicine> medicines = new List<Medicine>();
-        private static List<Laser> lasers = new List<Laser>();
-        private static List<UFO> ufo = new List<UFO>();
-        private static Random random = new Random();
-
-        static Ship ship = new Ship(new Point(10, 400), new Point(5, 5), new Size(70, 70));
+        private BufferedGraphicsContext _context;
+        private BufferedGraphics _buffer;
+        private List<Asteroid> asteroids = new List<Asteroid>();
+        private List<Bullet> bullets = new List<Bullet>();
+        private List<Medicine> medicines = new List<Medicine>();
+        private List<Laser> lasers = new List<Laser>();
+        private List<UFO> ufo = new List<UFO>();
+        private Random random = new Random();
+        private Form _form = new Form();
+        static Ship ship;
         static Timer timer = new Timer();
-        private static int score;
+        private int score;
+        private GameProcess _gameProcess;
 
 
-        public static int Width { get; set; }
-        public static int Height { get; set; }
+        public int Width { get; set; }
+        public int Height { get; set; }
 
 
-        public static BufferedGraphics Buffer
+        public BufferedGraphics Buffer
         {
             get { return _buffer; }
         }
 
         static GameProcess() { }
 
-        public static void Init(Form form)
+        public void Init(Form form, GameProcess gameProcess)
         {
             Graphics g;
+            _gameProcess = gameProcess;
             CollisionLogic collision = new CollisionLogic();
             _context = BufferedGraphicsManager.Current;
             g = form.CreateGraphics();
+            _form = form;
 
             Width = form.ClientSize.Width;
             Height = form.ClientSize.Height;
 
+            ship = new Ship(new Point(Height / 2, Width / 2), new Point(5, 5), new Size(70, 70), _gameProcess);
             _buffer = _context.Allocate(g, new Rectangle(0, 0, Width, Height));
 
             timer.Interval = 100;
             timer.Start();
             timer.Tick += Timer_Tick;
-
             form.KeyDown += Form_KeyDown;
-            Ship.DieShip += Ship_DieShip; ;
+            Ship.DieShip += Ship_DieShip; 
         }
 
-        private static void Ship_DieShip(object sender, EventArgs e)
+        private void Ship_DieShip(object sender, EventArgs e)
         {
-            timer.Stop();
+            Ship.DieShip -= Ship_DieShip;
+            timer.Tick -= Timer_Tick;
 
-            Buffer.Graphics.DrawString("Игра закончена", new Font(FontFamily.GenericSansSerif, 50, FontStyle.Underline), Brushes.LightGray, 50, 50);
-            Buffer.Graphics.DrawString($"Ваш счет {score}", new Font(FontFamily.GenericSansSerif, 50, FontStyle.Regular), Brushes.LightGray, 50, 150);
-            Buffer.Render();
+            SceneController
+              .Get()
+              .Init<EndScene>(_form)
+              .Draw(score);
+
         }
 
 
-        private static void Form_KeyDown(object sender, KeyEventArgs e)
+        private void Form_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Space)
             {
-                bullets.Add(new Bullet(new Point(ship.Rect.X + 10, ship.Rect.Y + 10), new Point(5, 0), new Size(40, 30)));
+                bullets.Add(new Bullet(new Point(ship.Rect.X + 10, ship.Rect.Y + 10), new Point(5, 0), new Size(40, 30), _gameProcess));
             }
             if(e.KeyCode == Keys.Alt)
             {
-                lasers.Add(new Laser(new Point(ship.Rect.X + 10, ship.Rect.Y + 10), new Point(5, 0), new Size(40, 30)));
+                lasers.Add(new Laser(new Point(ship.Rect.X + 10, ship.Rect.Y + 10), new Point(5, 0), new Size(40, 30), _gameProcess));
             }
             if (e.KeyCode == Keys.W)
             {
@@ -95,13 +102,13 @@ namespace GameEngine
             }
         }
 
-        private static void Timer_Tick(object sender, EventArgs e)
+        private  void Timer_Tick(object sender, EventArgs e)
         {
-            Draw();
+            _gameProcess.Draw();
             Update();
         }
 
-        public static void Draw()
+        public void Draw()
         {
             _buffer.Graphics.Clear(Color.Black);
             ship.Draw();
@@ -112,7 +119,7 @@ namespace GameEngine
                 var position = new Random();
                 var x = position.Next(0, Width / 2);
                 var y = position.Next(0, Height / 2);
-                medicines.Add(new Medicine(new Point(x, y), new Point(1, 1), new Size(40, 40)));
+                medicines.Add(new Medicine(new Point(x, y), new Point(1, 1), new Size(40, 40), _gameProcess));
             }
 
             foreach (var med in medicines)
@@ -138,26 +145,31 @@ namespace GameEngine
                 ship.Draw();
                 Buffer.Graphics.DrawString($"HP{ship.Energy}", SystemFonts.DefaultFont, Brushes.White, 100, 10);
                 Buffer.Graphics.DrawString($"У вас осталось {lasers.Count} выстрелов лазера", SystemFonts.DefaultFont, Brushes.White, 100, 30);
-                Buffer.Graphics.DrawString($"Score{score}", SystemFonts.DefaultFont, Brushes.White, 100, 20);
+                Buffer.Graphics.DrawString($"Score{_gameProcess.score}", SystemFonts.DefaultFont, Brushes.White, 100, 20);
                 Buffer.Render();
             }
 
 
         }
 
-        public static void Update()
+        public void Update()
         {
             if (asteroids.Count < 15)
             {
-                var size = 50;
-                var location = random.Next(0, Height);
-                asteroids.Add(new Asteroid(new Point(Width - 100, location), new Point(-4, -4), new Size(size, size)));
+                var rand = random.Next(1, 5);
+                if(rand == 3)
+                {
+                    var size = 50;
+                    var location = random.Next(0, Height);
+                    asteroids.Add(new Asteroid(new Point(random.Next(0,Width), random.Next(0, Height)), new Point(-4, -4), new Size(size, size), _gameProcess));
+                }
+              
             }
             if(ufo.Count < 1)
             {
                 var size = 50;
                 var location = random.Next(0, Height);
-                ufo.Add(new UFO(new Point(Width - 100, location), new Point(-4, -4), new Size(size, size)));
+                ufo.Add(new UFO(new Point(Width - 100, location), new Point(-4, -4), new Size(size, size), _gameProcess));
             }
             foreach (var med in medicines)
             {
@@ -173,10 +185,10 @@ namespace GameEngine
                 ship.Die();
             }
 
-            CollisionLogic.AsteroidsCollision( asteroids, bullets,  ship, ref score);
+            CollisionLogic.AsteroidsCollision( asteroids, bullets,  ship, ref _gameProcess.score, _gameProcess);
             CollisionLogic.UFOCollision(ship, ufo);
             CollisionLogic.MedicineCollision(medicines, ship);
-            CollisionLogic.BulletAndUFOCollision(ufo,bullets,ref score);
+            CollisionLogic.BulletAndUFOCollision(ufo,bullets,ref _gameProcess.score);
 
             foreach (var _asteroid in asteroids)
             {

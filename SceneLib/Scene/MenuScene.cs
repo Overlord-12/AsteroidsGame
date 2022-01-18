@@ -1,4 +1,5 @@
 ﻿
+using GameEngine;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -30,12 +31,10 @@ namespace SceneLib
             }
             if (e.KeyCode == Keys.Enter)
             {
-                SceneController              
-                    .Get();
-                GameEngine.GameProcess.Init(_form);
-                GameEngine.GameProcess.Draw();
-                
-
+                GameProcess gameProcess = new GameProcess();
+                SceneController.Get();
+                gameProcess.Init(_form,gameProcess);
+                gameProcess.Draw();
             }
         }
     }

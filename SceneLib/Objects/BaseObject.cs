@@ -1,5 +1,5 @@
 ﻿using GameEngine.Interface;
-using GameEngine.Properties;
+using SceneLib.Properties;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -16,14 +16,17 @@ namespace GameEngine.Objects
         protected Point pos;
         protected Point dir;
         protected Size size;
+        protected GameProcess gameProcess;
         public Size GetSize => this.size;
         public Point GetPos => this.pos;
         public Point GetDir => this.dir;
+       
 
-        public BaseObject(Point pos, Point dir, Size size)
+        public BaseObject(Point pos, Point dir, Size size, GameProcess gameProcess)
         {
             try
             {
+                this.gameProcess = gameProcess;
                 this.pos = pos;
                 this.dir = dir;
                 this.size = size;
@@ -45,7 +48,7 @@ namespace GameEngine.Objects
 
         public virtual void Draw()
         {
-            GameProcess.Buffer.Graphics.DrawImage(Resources.asteroid, pos.X, pos.Y, size.Width, size.Height);
+            gameProcess.Buffer.Graphics.DrawImage(Resources.asteroid, pos.X, pos.Y, size.Width, size.Height);
 
         }
 
@@ -55,9 +58,9 @@ namespace GameEngine.Objects
             pos.Y = pos.Y + dir.Y;
 
             if (pos.X < 0) dir.X = -dir.X;
-            if (pos.X > GameProcess.Width) dir.X = -dir.X;
+            if (pos.X > gameProcess.Width) dir.X = -dir.X;
             if (pos.Y < 0) dir.Y = -dir.Y;
-            if (pos.Y > GameProcess.Height) dir.Y = -dir.Y;
+            if (pos.Y > gameProcess.Height) dir.Y = -dir.Y;
         }
 
         public virtual void UpdateColl()

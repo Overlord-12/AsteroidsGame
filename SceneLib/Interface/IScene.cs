@@ -11,5 +11,6 @@ namespace SceneLib.Interface
     {
         void Init(Form form);
         void Draw();
+        void Draw(int i);
     }
 }

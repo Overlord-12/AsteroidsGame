@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using SceneLib.Properties;
 using System.Drawing;
 using System.Linq;
 using System.Text;
@@ -11,7 +12,7 @@ namespace GameEngine.Objects
     {
         public static event EventHandler DieShip;
         protected int HP = 100;
-        public Ship(Point pos, Point dir, Size size) : base(pos, dir, size) { }
+        public Ship(Point pos, Point dir, Size size, GameProcess gameProcess) : base(pos, dir, size, gameProcess) { }
         public int Energy
         {
             get { return HP; }
@@ -19,7 +20,7 @@ namespace GameEngine.Objects
 
         public override void Draw()
         {
-            GameProcess.Buffer.Graphics.DrawImage(Properties.Resources.ship, pos.X, pos.Y, size.Width, size.Height);
+            gameProcess.Buffer.Graphics.DrawImage(Resources.ship, pos.X, pos.Y, size.Width, size.Height) ;
         }
 
         public override void Update()
@@ -41,7 +42,7 @@ namespace GameEngine.Objects
         }
         public void Down()
         {
-            if (pos.Y < GameProcess.Height) pos.Y = pos.Y + dir.Y;
+            if (pos.Y < gameProcess.Height) pos.Y = pos.Y + dir.Y;
 
         }
         public void Left()
@@ -50,7 +51,7 @@ namespace GameEngine.Objects
         }
         public void Right()
         {
-            if (pos.X < GameProcess.Width) pos.X = pos.X + dir.X;
+            if (pos.X < gameProcess.Width) pos.X = pos.X + dir.X;
         }
         public void Die()
         {
