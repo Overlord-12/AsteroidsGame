@@ -1,4 +1,5 @@
-﻿using GameEngine;
+﻿
+using GameEngine;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -9,8 +10,10 @@ using System.Windows.Forms;
 
 namespace SceneLib
 {
-    public class EndScene: BaseForm
+    public class MenuScene : BaseForm
     {
+        public object SceneManager { get; private set; }
+
         public override void Draw()
         {
             Buffer.Graphics.Clear(Color.Black);
@@ -24,13 +27,14 @@ namespace SceneLib
         {
             if (e.KeyCode == Keys.Escape)
             {
-                _form.Close();
+                _form.Close(); 
             }
             if (e.KeyCode == Keys.Enter)
             {
+                GameProcess gameProcess = new GameProcess();
                 SceneController.Get();
-                GameProcess.Init(_form);
-                GameProcess.Draw();
+                gameProcess.Init(_form,gameProcess);
+                gameProcess.Draw();
             }
         }
     }

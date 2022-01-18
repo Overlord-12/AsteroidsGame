@@ -30,7 +30,7 @@ namespace SceneLib
             Height = _form.ClientSize.Height;
             Buffer = _context.Allocate(g, new Rectangle(0, 0, Width, Height));
 
-            _form.KeyDown += SceneKeyDown; // Подписываемся
+            _form.KeyDown += SceneKeyDown;
         }
 
         public virtual void SceneKeyDown(object sender, KeyEventArgs e) { }
@@ -39,7 +39,11 @@ namespace SceneLib
 
         public void Dispose()
         {
-            _form.KeyDown -= SceneKeyDown; // Отписываемся
+            _form.KeyDown -= SceneKeyDown;
+        }
+
+        public virtual void Draw(int i)
+        {
         }
     }
 }
