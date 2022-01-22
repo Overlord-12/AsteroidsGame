@@ -14,7 +14,7 @@ namespace GameEngine.Objects
 
         public override void Draw()
         {
-            gameProcess.Buffer.Graphics.DrawImage(Resources.laser, pos.X, pos.Y, size.Width, size.Height);
+            gameProcess.Buffer.Graphics.DrawImage(Resources.bullet, pos.X, pos.Y, size.Width, size.Height);
         }
         public override void Update()
         {

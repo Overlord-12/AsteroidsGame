@@ -1,4 +1,5 @@
 ﻿using GameEngine.Objects;
+using SceneLib.Interface;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -25,7 +26,7 @@ namespace GameEngine.GameLogic
                         bullets.RemoveAt(j);
                         if (asteroid.GetSize.Width == 50)
                         {
-                            CollisionLogic.CreateLitleAsteroids(asteroid, asteroids, gameProcess);
+                            CreateLitleAsteroids(asteroid, asteroids, gameProcess);
                         }
                         score += 30;
                         if (i != 0)
@@ -63,6 +64,43 @@ namespace GameEngine.GameLogic
                 }
             }
 
+        }
+
+        public static void LaserAndUFOCollison(List<UFO> ufo,List<Laser> lasers, ref int score)
+        {
+            for (int i = 0; i < ufo.Count; i++)
+            {
+
+                for (int j = 0; j < lasers.Count; j++)
+                {
+                    if (ufo.Count != 0 && ufo[i].Collision(lasers[j]))
+                    {
+                        ufo.RemoveAt(i);
+                        score += 30;
+                        if (i != 0)
+                            i--;
+                        continue;
+                    }
+                }
+            }
+        }
+
+        public static void LaserCollision(List<Asteroid> asteroids, List<Laser> laser, ref int score, GameProcess gameProcess)
+        {
+            for (int i = 0; i < asteroids.Count; i++)
+            {
+                for (int j = 0; j < laser.Count; j++)
+                {
+                    if (asteroids[i].Collision(laser[j]))
+                    {
+                        asteroids.RemoveAt(i);
+                        score += 30;
+                        if (i != 0)
+                            i--;
+                        continue;
+                    }
+                }
+            }
         }
 
         public static void UFOCollision(Ship ship, List<UFO> ufo)
