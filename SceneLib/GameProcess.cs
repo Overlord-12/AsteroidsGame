@@ -63,12 +63,9 @@ namespace GameEngine
 
             timer.Interval = 100;
             maxLaserCount = 3;
-            laserTimer.Interval = 1000;
 
-            laserTimer.Start();
             timer.Start();
 
-            laserTimer.Tick += LaserTimer_Tick;
             timer.Tick += Timer_Tick;
 
             form.KeyDown += Form_KeyDown;
@@ -113,16 +110,11 @@ namespace GameEngine
             if (e.KeyCode == Keys.D)
             {
                 ship.Right();
-            }
+            }          
             if (e.KeyCode == Keys.A)
             {
                 ship.Left();
             }
-        }
-
-        private void LaserTimer_Tick(object sender, EventArgs e)
-        {
-
         }
 
         private  void Timer_Tick(object sender, EventArgs e)
@@ -215,7 +207,7 @@ namespace GameEngine
             CollisionLogic.LaserCollision(asteroids,lasers, ref _gameProcess.score, _gameProcess);
             CollisionLogic.UFOCollision(ship, ufo);
             CollisionLogic.MedicineCollision(medicines, ship);
-            CollisionLogic.BulletAndUFOCollision(ufo,lasers,ref _gameProcess.score);
+            CollisionLogic.BulletAndUFOCollision(ufo,bullets,ref _gameProcess.score);
 
             foreach (var _asteroid in asteroids)
             {

@@ -38,20 +38,24 @@ namespace GameEngine.Objects
 
         public void Up()
         {
-            if (pos.Y > 0) pos.Y = pos.Y - dir.Y;
+            pos.Y = pos.Y - dir.Y;
+            if (pos.Y <= 0) pos.Y = gameProcess.Height;
         }
         public void Down()
         {
-            if (pos.Y < gameProcess.Height) pos.Y = pos.Y + dir.Y;
+            pos.Y = pos.Y + dir.Y;
+            if (pos.Y >= gameProcess.Height) pos.Y = 0-10;
 
         }
         public void Left()
         {
-            if (pos.X > 0) pos.X = pos.X - dir.X;
+            pos.X = pos.X - dir.X;
+            if (pos.X <= 0) pos.X = gameProcess.Width;
         }
         public void Right()
         {
-            if (pos.X < gameProcess.Width) pos.X = pos.X + dir.X;
+           pos.X = pos.X + dir.X;
+            if (pos.X >= gameProcess.Width) pos.X = 0 - 10;
         }
         public void Die()
         {

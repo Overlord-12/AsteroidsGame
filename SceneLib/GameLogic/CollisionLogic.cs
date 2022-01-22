@@ -45,7 +45,7 @@ namespace GameEngine.GameLogic
             }
         }
 
-        public static void BulletAndUFOCollision(List<UFO> ufo, List<Laser> bullets, ref int score)
+        public static void BulletAndUFOCollision(List<UFO> ufo, List<Bullet> bullets, ref int score)
         {
             for (int i = 0; i < ufo.Count; i++)
             {
