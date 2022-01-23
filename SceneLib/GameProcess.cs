@@ -1,6 +1,7 @@
 ﻿using GameEngine.GameLogic;
 using GameEngine.Objects;
 using SceneLib;
+using SceneLib.GameLogic;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -24,7 +25,6 @@ namespace GameEngine
         private Ship ship;
 
         private Timer timer = new Timer();
-        private Timer laserTimer = new Timer();
 
         private Form _form = new Form();
         private GameProcess _gameProcess;
@@ -32,8 +32,9 @@ namespace GameEngine
         private int score;
         private int maxLaserCount;
 
-        private Random random = new Random();
-
+        public int GetLaserCount { get { return lasers.Count; } }
+        public int GetMaxLaserCount { get { return maxLaserCount; } }
+        public int GetTotalScore { get { return score; } }
 
         public int Width { get; set; }
         public int Height { get; set; }
@@ -128,101 +129,47 @@ namespace GameEngine
             _buffer.Graphics.Clear(Color.Black);
             ship.Draw();
 
+            DrawLogic.AddMedicine(ship,medicines,_gameProcess);
+            DrawLogic.DrawMedicine(medicines);
 
-            if (ship.Energy < 50 && medicines.Count < 1)
-            {
-                var position = new Random();
-                var x = position.Next(0, Width / 2);
-                var y = position.Next(0, Height / 2);
-                medicines.Add(new Medicine(new Point(x, y), new Point(1, 1), new Size(40, 40), _gameProcess));
-            }
+            DrawLogic.DrawUFO(ufo);
 
-            foreach (var med in medicines)
-            {
-                med.Draw();
-            }
+            DrawLogic.DrawBullets(bullets);
 
-            foreach(var _ufo in ufo)
-            {
-                _ufo.Draw();
-            }
+            DrawLogic.DrawAsteroids(asteroids);
 
-            foreach (var asteroid in asteroids)
-                asteroid.Draw();
-
-            foreach (var _bullet in bullets)
-                _bullet.Draw();
-
-            foreach (var _laser in lasers)
-                _laser.Draw();
+            DrawLogic.DrawLaser(lasers);
 
             _buffer.Render();
-            if (ship != null)
-            {
-                ship.Draw();
-                Buffer.Graphics.DrawString($"HP{ship.Energy}", SystemFonts.DefaultFont, Brushes.White, 100, 10);
-                Buffer.Graphics.DrawString($"У вас осталось {maxLaserCount-lasers.Count} выстрелов лазера", SystemFonts.DefaultFont, Brushes.White, 100, 30);
-                Buffer.Graphics.DrawString($"Score{_gameProcess.score}", SystemFonts.DefaultFont, Brushes.White, 100, 20);
-                Buffer.Render();
-            }
+
+            DrawLogic.DrawShip(ship, _gameProcess);
 
 
         }
 
         public void Update()
         {
-            if (asteroids.Count < 15)
-            {
-                var rand = random.Next(1, 5);
-                if(rand == 3)
-                {
-                    var size = 50;
-                    var location = random.Next(0, Height);
-                    asteroids.Add(new Asteroid(new Point(random.Next(0,Width), random.Next(0, Height)), new Point(-4, -4), new Size(size, size), _gameProcess));
-                }
-              
-            }
-
-            if(ufo.Count < 1)
-            {
-                var size = 50;
-                var location = random.Next(0, Height);
-                ufo.Add(new UFO(new Point(Width - 100, location), new Point(-4, -4), new Size(size, size), _gameProcess));
-            }
-            foreach (var med in medicines)
-            {
-                med.Draw();
-            }
-            foreach(var _ufo in ufo)
-            {
-                _ufo.Update(ship.GetPos);
-            }
 
             if (ship.Energy <= 0)
             {
                 ship.Die();
             }
 
+            DrawLogic.DrawMedicine(medicines);
+
             CollisionLogic.AsteroidsCollision(asteroids, bullets,  ship, ref _gameProcess.score, _gameProcess);
             CollisionLogic.LaserCollision(asteroids,lasers, ref _gameProcess.score, _gameProcess);
             CollisionLogic.UFOCollision(ship, ufo);
             CollisionLogic.MedicineCollision(medicines, ship);
             CollisionLogic.BulletAndUFOCollision(ufo,bullets,ref _gameProcess.score);
+            CollisionLogic.LaserAndUFOCollison(ufo,lasers,ref _gameProcess.score);
 
-            foreach (var _asteroid in asteroids)
-            {
-                _asteroid.Update();
-            }
+            UpdateLogic.UpdateBullet(bullets);
+            UpdateLogic.UpdateLaser(lasers);
+            UpdateLogic.UpdateAsteroids(asteroids);
+            UpdateLogic.UpdateUFO(ufo, ship, _gameProcess);
+            UpdateLogic.UpdateAsteroids(asteroids, _gameProcess);
 
-            foreach (var _bullet in bullets)
-            {
-                _bullet.Update();
-            }
-
-            foreach(var _laser in lasers)
-            {
-                _laser.Update();
-            }
 
             for (int i = lasers.Count - 1; i >= 0 ; i--)
             {
