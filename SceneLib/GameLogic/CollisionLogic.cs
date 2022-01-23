@@ -134,7 +134,7 @@ namespace GameEngine.GameLogic
             Random random = new Random();
             for (int i = 0; i < 2; i++)
             {
-                Point pos = new Point(parentAsteroid.GetPos.X + random.Next(1, 20), parentAsteroid.GetPos.Y + random.Next(1, 20));
+                Point pos = new(parentAsteroid.GetPos.X + random.Next(1, 20), parentAsteroid.GetPos.Y + random.Next(1, 20));
                 asteroids.Add(new Asteroid(pos, parentAsteroid.GetDir, new Size(25, 25), gameProcess));
             }
         }
